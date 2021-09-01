@@ -39,4 +39,27 @@ router.post('/favorited', (req, res)=> {
     
 })
 
+router.post('/removeFromFavorite', (req, res)=> {
+    
+    Favorite.findOneAndDelete({movieId: req.body.movieId, userFrom: req.body.userFrom})
+        .exec((err, doc)=> {
+            if(err) return res.status(400).send(err)
+            else res.status(200).json({success: true, doc})
+        })
+})
+
+//movie id 정보를 DB에 있는 favoriteSchema에 넣어줌
+router.post('/addToFavorite', (req, res)=> {
+
+    const favorite = new Favorite(req.body) //instance 만듦
+    
+    favorite.save((err, doc) => {
+        if(err) {
+            return res.status(400).send(err)
+        }
+        return res.status(200).json({success: true})
+    })
+})
+
+
 module.exports = router;
